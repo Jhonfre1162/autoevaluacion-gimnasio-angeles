@@ -25,7 +25,7 @@ margin:auto;
 box-shadow:0px 0px 10px rgba(0,0,0,0.1);
 }
 
-select,input{
+input, select{
 padding:8px;
 margin:6px;
 width:260px;
@@ -75,14 +75,14 @@ font-weight:bold;
 
 <body>
 
-<!-- 🔵 CAMBIA SOLO EL NOMBRE DEL ARCHIVO -->
 <img src="logo.png" class="logo">
 
 <h2>Autoevaluación Estudiantil</h2>
 
 <div class="container">
 
-<select id="grado" onchange="cargarEstudiantes()">
+<!-- ✅ GRADO FIJO -->
+<select id="grado">
 <option value="">Seleccione grado</option>
 <option value="4A">Cuarto A</option>
 <option value="6B">Sexto B</option>
@@ -91,7 +91,8 @@ font-weight:bold;
 
 <br>
 
-<select id="estudiante"></select>
+<!-- ✅ NOMBRE ESCRITO -->
+<input type="text" id="estudiante" placeholder="Escribe tu nombre completo">
 
 <br>
 
@@ -146,68 +147,9 @@ font-weight:bold;
 
 <script>
 
-/* 🔴 PEGA AQUÍ LOS NOMBRES */
-const estudiantes = {
-
-"4A":[
-"ANSARI VALENCIA ABID" 
-"BOLAÑOS PITO JUAN JOSE"
-"CAMPO GUTIERREZ JUAN MARTIN"
-"CASTRO CALERO ANTONIA"
-"CHAVARRO MUÑOZ JERONIMO "
-"CORTES COLLAZOS JUAN MANUEL"
-"DAZA TERAN JUAN MIGUEL"
-"DELGADO  TORO LUCIANA "
-"DORADO LOZANO JOSE DANIEL"
-"ERAZO GÓMEZ SALOME "
-"GALINDEZ MUÑOZ JUAN ESTEBAN"
-"GÓMEZ PRADO JOAQUIN "
-"LUNA LUNA THALIANA  "
-"ORDOÑEZ ESLAVA DAVID RENE"
-"ORDOÑEZ ORDOÑEZ SANTIAGO" 
-"OROZCO MAYORGA NAIARA "
-"PALOMINO ARIAS MARIA VICTORIA"
-"PARDO DUQUE NICOLAS "
-"PRADO VASQUEZ SARA ISABELLE"
-"SALAMANCA GUZMAN JUAN JOSE"
-"SANCHEZ ORTEGA LUIS SANTIAGO"
-"SANCHEZ RODRIGUEZ ANGEL SANTIAGO"
-"SERNA SALAZAR JUAN JOSE"
-"SOTELO ORDOÑEZ ANTONIO JOSE"
-"VELASQUEZ DIAZ LAURA SOFIA"
-],
-
-"6B":[
-"ALEGRIA ORTIZ JUAN DIEGO"
-],
-
-"9":[
-"AQUI PEGAS LOS 28 NOMBRES"
-]
-
-}
-
-/* CARGAR ESTUDIANTES */
-function cargarEstudiantes(){
-let grado=document.getElementById("grado").value
-let lista=estudiantes[grado]
-let select=document.getElementById("estudiante")
-select.innerHTML=""
-
-if(!lista) return
-
-lista.forEach(e=>{
-let option=document.createElement("option")
-option.text=e
-select.add(option)
-})
-}
-
-/* LIMPIAR NOTAS AL CAMBIAR MATERIA */
+/* LIMPIAR NOTAS */
 function limpiarNotas(){
-document.querySelectorAll(".nota").forEach(n=>{
-n.value=""
-})
+document.querySelectorAll(".nota").forEach(n=>n.value="")
 document.getElementById("promedio").innerText=""
 }
 
@@ -234,7 +176,7 @@ let estudiante=document.getElementById("estudiante").value
 let materia=document.getElementById("materia").value
 
 if(!grado || !estudiante){
-alert("Seleccione grado y estudiante")
+alert("Debe seleccionar grado y escribir nombre")
 return
 }
 
@@ -245,14 +187,12 @@ notas.push(parseFloat(n.value)||0)
 
 let promedio=calcularPromedio()
 
-let datos={
-grado,estudiante,materia,notas,promedio
-}
+let datos={grado,estudiante,materia,notas,promedio}
 
-/* 🔵 PEGAR URL GOOGLE SCRIPT */
-let url="https://script.google.com/macros/s/AKfycbxypbjskiUN2NCUlk3rJgKBvur2l-BiuSxZtjvS_UFZYIrzY5PH9OYMNVD6RIOWW7wg/exec"
+/* PEGAR URL GOOGLE SCRIPT */
+let url="AQUI_TU_URL"
 
-if(url==="https://script.google.com/macros/s/AKfycbxypbjskiUN2NCUlk3rJgKBvur2l-BiuSxZtjvS_UFZYIrzY5PH9OYMNVD6RIOWW7wg/exec"){
+if(url==="AQUI_TU_URL"){
 alert("Falta conectar Google Sheets")
 return
 }
