@@ -7,56 +7,38 @@
 <style>
 
 body{
-font-family: Arial;
+font-family:Arial;
 background:#f4f6f8;
 text-align:center;
-padding:30px;
+padding:20px;
 }
-
-/* Logo */
 
 .logo{
-width:400px;
-margin-bottom:10px;
+width:350px;
 }
-
-/* Titulo */
-
-h1{
-color:#1e3a8a;
-}
-
-/* contenedor */
 
 .container{
 background:white;
-padding:30px;
+padding:20px;
 border-radius:10px;
-width:600px;
+width:700px;
 margin:auto;
 box-shadow:0px 0px 10px rgba(0,0,0,0.1);
 }
 
-/* selects */
-
 select,input{
 padding:8px;
 margin:6px;
-width:250px;
-border-radius:5px;
-border:1px solid #ccc;
+width:260px;
 }
-
-/* tabla */
 
 table{
 margin:auto;
 border-collapse:collapse;
-margin-top:20px;
 }
 
 td,th{
-border:1px solid #ddd;
+border:1px solid #ccc;
 padding:8px;
 }
 
@@ -65,59 +47,40 @@ background:#1e3a8a;
 color:white;
 }
 
-/* botones */
-
 button{
 padding:10px 20px;
 margin:10px;
 border:none;
 border-radius:5px;
 cursor:pointer;
-}
-
-.calcular{
-background:#22c55e;
+background:#1e3a8a;
 color:white;
-}
-
-.guardar{
-background:#ec4899;
-color:white;
-}
-
-.promedio{
-font-size:20px;
-margin-top:10px;
-color:#1e3a8a;
 }
 
 </style>
+
 </head>
 
 <body>
 
 <img src="logo.png" class="logo">
 
-<h1>Autoevaluación Estudiantil</h1>
+<h2>Autoevaluación Estudiantil</h2>
 
 <div class="container">
 
-<label>Grado</label><br>
-
-<select id="grado">
-<option>Cuarto A</option>
-<option>Sexto B</option>
-<option>Noveno</option>
+<select id="grado" onchange="cargarEstudiantes()">
+<option value="">Seleccione grado</option>
+<option value="4A">Cuarto A</option>
+<option value="6B">Sexto B</option>
+<option value="9">Noveno</option>
 </select>
 
 <br>
 
-<label>Estudiante</label><br>
-<input id="estudiante" placeholder="Escriba su nombre">
+<select id="estudiante"></select>
 
 <br>
-
-<label>Asignatura</label><br>
 
 <select id="materia">
 <option>Matemáticas</option>
@@ -136,121 +99,128 @@ color:#1e3a8a;
 <option>Ciencias Sociales</option>
 </select>
 
-<table>
-
+<table id="tabla">
 <tr>
 <th>Criterio</th>
 <th>Nota</th>
 </tr>
-
-<tr>
-<td>1. Entiendo lo que explica mi profesor</td>
-<td><input class="nota"></td>
-</tr>
-
-<tr>
-<td>2. Hago preguntas cuando no entiendo</td>
-<td><input class="nota"></td>
-</tr>
-
-<tr>
-<td>3. Mantengo ordenados mis cuadernos</td>
-<td><input class="nota"></td>
-</tr>
-
-<tr>
-<td>4. Respeto la opinión de los demás</td>
-<td><input class="nota"></td>
-</tr>
-
-<tr>
-<td>5. Cumplo con mis deberes</td>
-<td><input class="nota"></td>
-</tr>
-
-<tr>
-<td>6. Trato con respeto a mis compañeros</td>
-<td><input class="nota"></td>
-</tr>
-
-<tr>
-<td>7. Trabajo bien en grupo</td>
-<td><input class="nota"></td>
-</tr>
-
-<tr>
-<td>8. Digo la verdad</td>
-<td><input class="nota"></td>
-</tr>
-
-<tr>
-<td>9. Devuelvo los objetos que no me pertenecen</td>
-<td><input class="nota"></td>
-</tr>
-
-<tr>
-<td>10. Me responsabilizo de mi aprendizaje</td>
-<td><input class="nota"></td>
-</tr>
-
 </table>
 
-<br>
+<button onclick="guardar()">Guardar</button>
 
-<button class="calcular" onclick="calcular()">Calcular promedio</button>
-
-<button class="guardar" onclick="guardar()">Guardar</button>
-
-<div id="resultado" class="promedio"></div>
+<h3 id="promedio"></h3>
 
 </div>
 
 <script>
 
-function calcular(){
+/* CREAR CRITERIOS */
+let tabla=document.getElementById("tabla")
 
-let notas=document.querySelectorAll(".nota");
+for(let i=1;i<=10;i++){
+let fila=document.createElement("tr")
+fila.innerHTML=`
+<td>Criterio ${i}</td>
+<td><input class="nota"></td>
+`
+tabla.appendChild(fila)
+}
 
-let suma=0;
+/* LISTAS */
+const estudiantes = {
 
-notas.forEach(n=>{
-suma+=parseFloat(n.value || 0);
-})
+"4A":[
+"Alejandra Ossa",
+"Alejandro Paz",
+"Ana Cuaran"
+],
 
-let promedio=suma/notas.length;
+"6B":[
+"Juan López",
+"Mateo García",
+"Samuel Torres"
+],
 
-document.getElementById("resultado").innerHTML=
-"Promedio: "+promedio.toFixed(2);
+"9":[
+"Laura Muñoz",
+"Camilo Rojas",
+"Daniel Paz"
+]
 
 }
 
-/* guardar datos temporalmente */
+/* CARGAR ESTUDIANTES */
+function cargarEstudiantes(){
 
-function guardar(){
-
-let estudiante=document.getElementById("estudiante").value
 let grado=document.getElementById("grado").value
-let materia=document.getElementById("materia").value
+let lista=estudiantes[grado]
+
+let select=document.getElementById("estudiante")
+select.innerHTML=""
+
+if(!lista) return
+
+lista.forEach(e=>{
+let option=document.createElement("option")
+option.text=e
+select.add(option)
+})
+
+}
+
+/* CALCULAR PROMEDIO */
+function calcularPromedio(){
 
 let notas=[]
 
 document.querySelectorAll(".nota").forEach(n=>{
-notas.push(n.value)
+notas.push(parseFloat(n.value||0))
 })
+
+let promedio=notas.reduce((a,b)=>a+b,0)/10
+
+document.getElementById("promedio").innerText="Promedio: "+promedio.toFixed(2)
+
+return promedio
+}
+
+/* GUARDAR */
+async function guardar(){
+
+let grado=document.getElementById("grado").value
+let estudiante=document.getElementById("estudiante").value
+let materia=document.getElementById("materia").value
+
+if(!grado || !estudiante){
+alert("Seleccione grado y estudiante")
+return
+}
+
+let notas=[]
+
+document.querySelectorAll(".nota").forEach(n=>{
+notas.push(parseFloat(n.value||0))
+})
+
+let promedio=calcularPromedio()
 
 let datos={
 grado:grado,
 estudiante:estudiante,
 materia:materia,
-notas:notas
+notas:notas,
+promedio:promedio
 }
 
-localStorage.setItem(
-estudiante+"-"+materia,
-JSON.stringify(datos)
-)
+/* PEGUE SU URL DE GOOGLE SCRIPT AQUI */
+let url="https://script.google.com/macros/s/AKfycbxypbjskiUN2NCUlk3rJgKBvur2l-BiuSxZtjvS_UFZYIrzY5PH9OYMNVD6RIOWW7wg/exec"
 
-alert("Datos guardados")
+await fetch(url,{
+method:"POST",
+body:JSON.stringify(datos)
+})
+
+alert("Guardado correctamente")
 
 }
 
