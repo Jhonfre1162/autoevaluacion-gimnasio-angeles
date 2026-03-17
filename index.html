@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Autoevaluación Colegio Gimnasio Ángeles</title>
+
+<style>
+body{
+font-family: Arial;
+background:#f4f6f8;
+padding:40px;
+}
+
+h1{
+color:#2c3e50;
+}
+
+select,input{
+padding:8px;
+margin:5px;
+width:250px;
+}
+
+table{
+border-collapse: collapse;
+margin-top:20px;
+}
+
+td,th{
+border:1px solid #ccc;
+padding:8px;
+}
+
+button{
+padding:10px 20px;
+background:#2c7be5;
+color:white;
+border:none;
+cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Autoevaluación Estudiantil</h1>
+
+<label>Grado</label><br>
+<select id="grado">
+<option>Cuarto A</option>
+<option>Sexto B</option>
+<option>Noveno</option>
+</select>
+
+<br><br>
+
+<label>Estudiante</label><br>
+<input id="estudiante" placeholder="Buscar nombre">
+
+<br><br>
+
+<label>Asignatura</label><br>
+
+<select id="materia">
+<option>Matemáticas</option>
+<option>Física</option>
+<option>Álgebra</option>
+<option>Estadística</option>
+<option>Biología</option>
+<option>Química</option>
+<option>Inglés</option>
+<option>Informática</option>
+<option>Ciencias Políticas</option>
+<option>Educación Física</option>
+<option>Lengua Castellana</option>
+<option>Filosofía</option>
+<option>Ciencias Naturales</option>
+<option>Ciencias Sociales</option>
+</select>
+
+<table>
+
+<tr>
+<th>Criterio</th>
+<th>Nota</th>
+</tr>
+
+<tr>
+<td>1. Entiendo lo que explica mi profesor</td>
+<td><input class="nota"></td>
+</tr>
+
+<tr>
+<td>2. Hago preguntas cuando no entiendo</td>
+<td><input class="nota"></td>
+</tr>
+
+<tr>
+<td>3. Mantengo ordenados mis cuadernos</td>
+<td><input class="nota"></td>
+</tr>
+
+<tr>
+<td>4. Respeto la opinión de los demás</td>
+<td><input class="nota"></td>
+</tr>
+
+<tr>
+<td>5. Cumplo con mis deberes</td>
+<td><input class="nota"></td>
+</tr>
+
+<tr>
+<td>6. Trato con respeto a mis compañeros</td>
+<td><input class="nota"></td>
+</tr>
+
+<tr>
+<td>7. Trabajo bien en grupo</td>
+<td><input class="nota"></td>
+</tr>
+
+<tr>
+<td>8. Digo la verdad</td>
+<td><input class="nota"></td>
+</tr>
+
+<tr>
+<td>9. Devuelvo los objetos que no me pertenecen</td>
+<td><input class="nota"></td>
+</tr>
+
+<tr>
+<td>10. Me responsabilizo de mi aprendizaje</td>
+<td><input class="nota"></td>
+</tr>
+
+</table>
+
+<br>
+
+<button onclick="calcular()">Calcular Promedio</button>
+
+<h2 id="resultado"></h2>
+
+<script>
+
+function calcular(){
+
+let notas=document.querySelectorAll(".nota");
+
+let suma=0;
+
+notas.forEach(n=>{
+suma+=parseFloat(n.value || 0);
+})
+
+let promedio=suma/notas.length;
+
+document.getElementById("resultado").innerHTML="Promedio: "+promedio.toFixed(2);
+
+}
+
+</script>
+
+</body>
+</html>
