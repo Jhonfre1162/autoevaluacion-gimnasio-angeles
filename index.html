@@ -140,13 +140,43 @@ font-weight:bold;
 </table>
 
 <button onclick="guardar()">Guardar</button>
+<button onclick="descargarExcel()">Descargar Excel</button>
+
 
 <div id="promedio"></div>
 
 </div>
 
 <script>
+function descargarExcel(){
 
+let grado=document.getElementById("grado").value
+let estudiante=document.getElementById("estudiante").value
+let materia=document.getElementById("materia").value
+
+let notas=[]
+document.querySelectorAll(".nota").forEach(n=>{
+notas.push(n.value || 0)
+})
+
+let promedio=document.getElementById("promedio").innerText
+
+let contenido = `
+Grado,Estudiante,Materia,C1,C2,C3,C4,C5,C6,C7,C8,C9,C10,Promedio
+${grado},${estudiante},${materia},${notas.join(",")},${promedio.replace("Promedio: ","")}
+`
+
+let blob = new Blob([contenido], { type: 'text/csv' })
+let url = URL.createObjectURL(blob)
+
+let a = document.createElement("a")
+a.href = url
+a.download = "autoevaluacion.csv"
+a.click()
+
+URL.revokeObjectURL(url)
+
+}
 /* LIMPIAR NOTAS */
 function limpiarNotas(){
 document.querySelectorAll(".nota").forEach(n=>n.value="")
@@ -168,7 +198,6 @@ document.getElementById("promedio").innerText="Promedio: "+promedio.toFixed(2)
 return promedio
 }
 
-/* GUARDAR */
 async function guardar(){
 
 let grado=document.getElementById("grado").value
@@ -189,15 +218,26 @@ let promedio=calcularPromedio()
 
 let datos={grado,estudiante,materia,notas,promedio}
 
-/* PEGAR URL GOOGLE SCRIPT */
+/* 🔵 TU URL YA CORRECTA */
 let url="https://script.google.com/macros/s/AKfycbx8R3fRcez_bSSk2rC4KLeOgAI5loP7YDM9k_9c_vHpP9aMC3NSi2QU2GtZV40awiD8/exec"
-await fetch(url,{
+
+try{
+
+let respuesta = await fetch(url,{
 method:"POST",
 body:JSON.stringify(datos)
 })
 
-alert("Guardado correctamente")
+let texto = await respuesta.text()
 
+if(texto === "ok"){
+alert("✅ Guardado correctamente en Google Sheets")
+}else{
+alert("⚠️ Se envió, pero revisa el Sheet")
+}
+
+}catch(error){
+alert("❌ Error de conexión: revisa internet o permisos")
 }
 
 </script>
