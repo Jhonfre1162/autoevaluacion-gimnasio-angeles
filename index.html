@@ -2,62 +2,120 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Autoevaluación Colegio Gimnasio Ángeles</title>
+<title>Autoevaluación - Gimnasio Ángeles</title>
 
 <style>
+
 body{
 font-family: Arial;
 background:#f4f6f8;
-padding:40px;
+text-align:center;
+padding:30px;
 }
 
-h1{
-color:#2c3e50;
+/* Logo */
+
+.logo{
+width:400px;
+margin-bottom:10px;
 }
+
+/* Titulo */
+
+h1{
+color:#1e3a8a;
+}
+
+/* contenedor */
+
+.container{
+background:white;
+padding:30px;
+border-radius:10px;
+width:600px;
+margin:auto;
+box-shadow:0px 0px 10px rgba(0,0,0,0.1);
+}
+
+/* selects */
 
 select,input{
 padding:8px;
-margin:5px;
+margin:6px;
 width:250px;
+border-radius:5px;
+border:1px solid #ccc;
 }
 
+/* tabla */
+
 table{
-border-collapse: collapse;
+margin:auto;
+border-collapse:collapse;
 margin-top:20px;
 }
 
 td,th{
-border:1px solid #ccc;
+border:1px solid #ddd;
 padding:8px;
 }
 
+th{
+background:#1e3a8a;
+color:white;
+}
+
+/* botones */
+
 button{
 padding:10px 20px;
-background:#2c7be5;
-color:white;
+margin:10px;
 border:none;
+border-radius:5px;
 cursor:pointer;
 }
+
+.calcular{
+background:#22c55e;
+color:white;
+}
+
+.guardar{
+background:#ec4899;
+color:white;
+}
+
+.promedio{
+font-size:20px;
+margin-top:10px;
+color:#1e3a8a;
+}
+
 </style>
 </head>
 
 <body>
 
+<img src="logo.png" class="logo">
+
 <h1>Autoevaluación Estudiantil</h1>
 
+<div class="container">
+
 <label>Grado</label><br>
+
 <select id="grado">
 <option>Cuarto A</option>
 <option>Sexto B</option>
 <option>Noveno</option>
 </select>
 
-<br><br>
+<br>
 
 <label>Estudiante</label><br>
-<input id="estudiante" placeholder="Buscar nombre">
+<input id="estudiante" placeholder="Escriba su nombre">
 
-<br><br>
+<br>
 
 <label>Asignatura</label><br>
 
@@ -139,9 +197,13 @@ cursor:pointer;
 
 <br>
 
-<button onclick="calcular()">Calcular Promedio</button>
+<button class="calcular" onclick="calcular()">Calcular promedio</button>
 
-<h2 id="resultado"></h2>
+<button class="guardar" onclick="guardar()">Guardar</button>
+
+<div id="resultado" class="promedio"></div>
+
+</div>
 
 <script>
 
@@ -157,7 +219,38 @@ suma+=parseFloat(n.value || 0);
 
 let promedio=suma/notas.length;
 
-document.getElementById("resultado").innerHTML="Promedio: "+promedio.toFixed(2);
+document.getElementById("resultado").innerHTML=
+"Promedio: "+promedio.toFixed(2);
+
+}
+
+/* guardar datos temporalmente */
+
+function guardar(){
+
+let estudiante=document.getElementById("estudiante").value
+let grado=document.getElementById("grado").value
+let materia=document.getElementById("materia").value
+
+let notas=[]
+
+document.querySelectorAll(".nota").forEach(n=>{
+notas.push(n.value)
+})
+
+let datos={
+grado:grado,
+estudiante:estudiante,
+materia:materia,
+notas:notas
+}
+
+localStorage.setItem(
+estudiante+"-"+materia,
+JSON.stringify(datos)
+)
+
+alert("Datos guardados")
 
 }
 
