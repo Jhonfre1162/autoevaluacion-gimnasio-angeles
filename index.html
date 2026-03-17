@@ -96,7 +96,7 @@ font-weight:bold;
 
 <br>
 
-<select id="materia" onchange="limpiarNotas()">
+<select id="materia" onchange="limpiarNotas(); cargarNotas();">
 <option>Matemáticas</option>
 <option>Física</option>
 <option>Álgebra</option>
@@ -148,6 +148,7 @@ font-weight:bold;
 </div>
 
 <script>
+let datosPorMateria = {}
 function descargarExcel(){
 
 let grado=document.getElementById("grado").value
@@ -179,8 +180,29 @@ URL.revokeObjectURL(url)
 }
 /* LIMPIAR NOTAS */
 function limpiarNotas(){
-document.querySelectorAll(".nota").forEach(n=>n.value="")
-document.getElementById("promedio").innerText=""
+
+let materiaActual = document.getElementById("materia").value
+
+let notas=[]
+document.querySelectorAll(".nota").forEach(n=>{
+notas.push(n.value || 0)
+})
+
+datosPorMateria[materiaActual] = notas
+
+cargarNotas()
+}
+function cargarNotas(){
+
+let materiaActual = document.getElementById("materia").value
+
+let notas = datosPorMateria[materiaActual] || ["","","","","","","","","",""]
+
+document.querySelectorAll(".nota").forEach((n,i)=>{
+n.value = notas[i]
+})
+
+calcularPromedio()
 }
 
 /* PROMEDIO AUTOMÁTICO */
@@ -216,7 +238,11 @@ notas.push(parseFloat(n.value)||0)
 
 let promedio=calcularPromedio()
 
-let datos={grado,estudiante,materia,notas,promedio}
+let datos={
+grado,
+estudiante,
+todasLasMaterias: datosPorMateria
+}
 
 /* 🔵 TU URL YA CORRECTA */
 let url="https://script.google.com/macros/s/AKfycbx86KIjisSKpT87Dw4SlDGO2c1gU_KYP1sz1pUV9k-Dl8N52nDCJWU6667_aBhBCBfS/exec"
