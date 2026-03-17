@@ -5,7 +5,6 @@
 <title>Autoevaluación - Gimnasio Ángeles</title>
 
 <style>
-
 body{
 font-family:Arial;
 background:#f4f6f8;
@@ -21,7 +20,7 @@ width:350px;
 background:white;
 padding:20px;
 border-radius:10px;
-width:700px;
+width:850px;
 margin:auto;
 box-shadow:0px 0px 10px rgba(0,0,0,0.1);
 }
@@ -35,16 +34,24 @@ width:260px;
 table{
 margin:auto;
 border-collapse:collapse;
+width:100%;
 }
 
 td,th{
 border:1px solid #ccc;
 padding:8px;
+text-align:left;
 }
 
 th{
 background:#1e3a8a;
 color:white;
+text-align:center;
+}
+
+.titulo{
+background:#e0e7ff;
+font-weight:bold;
 }
 
 button{
@@ -57,12 +64,18 @@ background:#1e3a8a;
 color:white;
 }
 
+#promedio{
+font-size:20px;
+color:#1e3a8a;
+margin-top:10px;
+font-weight:bold;
+}
 </style>
-
 </head>
 
 <body>
 
+<!-- 🔵 CAMBIA SOLO EL NOMBRE DEL ARCHIVO -->
 <img src="logo.png" class="logo">
 
 <h2>Autoevaluación Estudiantil</h2>
@@ -82,7 +95,7 @@ color:white;
 
 <br>
 
-<select id="materia">
+<select id="materia" onchange="limpiarNotas()">
 <option>Matemáticas</option>
 <option>Física</option>
 <option>Álgebra</option>
@@ -99,62 +112,61 @@ color:white;
 <option>Ciencias Sociales</option>
 </select>
 
-<table id="tabla">
-<tr>
-<th>Criterio</th>
-<th>Nota</th>
-</tr>
+<table>
+
+<tr><th>Criterio</th><th>Nota</th></tr>
+
+<tr class="titulo"><td colspan="2">Dimensión Cognitiva</td></tr>
+<tr><td>1. Entiendo lo que explica mi profesor y lo puedo explicar con mis propias palabras.</td><td><input class="nota"></td></tr>
+<tr><td>2. Hago preguntas cuando no entiendo algo y sigo las instrucciones.</td><td><input class="nota"></td></tr>
+<tr><td>3. Mantengo ordenados mis cuadernos y termino mis actividades.</td><td><input class="nota"></td></tr>
+
+<tr class="titulo"><td colspan="2">Dimensión Actitudinal</td></tr>
+<tr><td>4. Respeto la opinión de los demás y me esfuerzo por mejorar.</td><td><input class="nota"></td></tr>
+<tr><td>5. Cumplo con mis deberes y muestro interés por aprender.</td><td><input class="nota"></td></tr>
+
+<tr class="titulo"><td colspan="2">Dimensión Convivencial</td></tr>
+<tr><td>6. Trato con respeto a mis compañeros y profesores.</td><td><input class="nota"></td></tr>
+<tr><td>7. Trabajo bien en grupo y cumplo normas.</td><td><input class="nota"></td></tr>
+
+<tr class="titulo"><td colspan="2">Dimensión Ética</td></tr>
+<tr><td>8. Digo la verdad aunque me cueste.</td><td><input class="nota"></td></tr>
+<tr><td>9. Cuido las cosas y devuelvo lo que no es mío.</td><td><input class="nota"></td></tr>
+
+<tr class="titulo"><td colspan="2">Criterio Integrador</td></tr>
+<tr><td>10. Me responsabilizo de mi aprendizaje.</td><td><input class="nota"></td></tr>
+
 </table>
 
 <button onclick="guardar()">Guardar</button>
 
-<h3 id="promedio"></h3>
+<div id="promedio"></div>
 
 </div>
 
 <script>
 
-/* CREAR CRITERIOS */
-let tabla=document.getElementById("tabla")
-
-for(let i=1;i<=10;i++){
-let fila=document.createElement("tr")
-fila.innerHTML=`
-<td>Criterio ${i}</td>
-<td><input class="nota"></td>
-`
-tabla.appendChild(fila)
-}
-
-/* LISTAS */
+/* 🔴 PEGA AQUÍ LOS NOMBRES */
 const estudiantes = {
 
 "4A":[
-"Alejandra Ossa",
-"Alejandro Paz",
-"Ana Cuaran"
+"AQUI PEGAS LOS 28 NOMBRES"
 ],
 
 "6B":[
-"Juan López",
-"Mateo García",
-"Samuel Torres"
+"AQUI PEGAS LOS 28 NOMBRES"
 ],
 
 "9":[
-"Laura Muñoz",
-"Camilo Rojas",
-"Daniel Paz"
+"AQUI PEGAS LOS 28 NOMBRES"
 ]
 
 }
 
 /* CARGAR ESTUDIANTES */
 function cargarEstudiantes(){
-
 let grado=document.getElementById("grado").value
 let lista=estudiantes[grado]
-
 let select=document.getElementById("estudiante")
 select.innerHTML=""
 
@@ -165,22 +177,28 @@ let option=document.createElement("option")
 option.text=e
 select.add(option)
 })
-
 }
 
-/* CALCULAR PROMEDIO */
-function calcularPromedio(){
-
-let notas=[]
-
+/* LIMPIAR NOTAS AL CAMBIAR MATERIA */
+function limpiarNotas(){
 document.querySelectorAll(".nota").forEach(n=>{
-notas.push(parseFloat(n.value||0))
+n.value=""
+})
+document.getElementById("promedio").innerText=""
+}
+
+/* PROMEDIO AUTOMÁTICO */
+document.querySelectorAll(".nota").forEach(input=>{
+input.addEventListener("input",calcularPromedio)
 })
 
+function calcularPromedio(){
+let notas=[]
+document.querySelectorAll(".nota").forEach(n=>{
+notas.push(parseFloat(n.value)||0)
+})
 let promedio=notas.reduce((a,b)=>a+b,0)/10
-
 document.getElementById("promedio").innerText="Promedio: "+promedio.toFixed(2)
-
 return promedio
 }
 
@@ -197,23 +215,23 @@ return
 }
 
 let notas=[]
-
 document.querySelectorAll(".nota").forEach(n=>{
-notas.push(parseFloat(n.value||0))
+notas.push(parseFloat(n.value)||0)
 })
 
 let promedio=calcularPromedio()
 
 let datos={
-grado:grado,
-estudiante:estudiante,
-materia:materia,
-notas:notas,
-promedio:promedio
+grado,estudiante,materia,notas,promedio
 }
 
-/* PEGUE SU URL DE GOOGLE SCRIPT AQUI */
+/* 🔵 PEGAR URL GOOGLE SCRIPT */
 let url="https://script.google.com/macros/s/AKfycbxypbjskiUN2NCUlk3rJgKBvur2l-BiuSxZtjvS_UFZYIrzY5PH9OYMNVD6RIOWW7wg/exec"
+
+if(url==="https://script.google.com/macros/s/AKfycbxypbjskiUN2NCUlk3rJgKBvur2l-BiuSxZtjvS_UFZYIrzY5PH9OYMNVD6RIOWW7wg/exec"){
+alert("Falta conectar Google Sheets")
+return
+}
 
 await fetch(url,{
 method:"POST",
